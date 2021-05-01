@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "backend.c"
+#include <curl/curl.h>
+
+long statusCode;
 
 void displayCaseData(char country[])
 {
@@ -9,6 +12,11 @@ void displayCaseData(char country[])
     Should also calculate statistics and display them here
     If country doesn't exist/API call fails, print error message and return
     */
+	statusCode = setQuery(country, "cases");
+	if (statusCode != 200) {
+		printf("API call failed, check country spelling.\n");
+		return;
+	}
 	printf("Case data for %s\n", country);
 }
 void displayVaccineData(char country[])

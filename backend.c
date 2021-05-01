@@ -7,7 +7,7 @@
 char urlBase[45] = "https://covid-api.mmediagroup.fr/v1/";
 
 // uses libcurl to grab API data. Takes a URL and filename for the output
-void fetchQuery(const char* url, const char* outputFileName) {
+long fetchQuery(const char* url, const char* outputFileName) {
 
   // generates a curl request, sets the operation to URL curl
   CURL* easyhandle = curl_easy_init();
@@ -17,13 +17,15 @@ void fetchQuery(const char* url, const char* outputFileName) {
   FILE* file = fopen( outputFileName, "w" );
   curl_easy_setopt( easyhandle, CURLOPT_WRITEDATA, file);
   curl_easy_perform( easyhandle );
+  long httpStatus;
+  curl_easy_getinfo ( easyhandle, CURLINFO_RESPONSE_CODE, &httpStatus);
   curl_easy_cleanup( easyhandle );
   fclose(file);
-  
+  return httpStatus;
 }
 
 // constructs arguments for and then calls fetchQuery
-void setQuery(const char* country, const char* category) {
+long setQuery(const char* country, const char* category) {
 
   // uses memstream to construct the API url with country/category
   FILE *stream;
@@ -32,7 +34,7 @@ void setQuery(const char* country, const char* category) {
   stream = open_memstream(&buf, &len);
   fprintf(stream, "%s%s?country=%s", urlBase, category, country);
   fclose(stream);
-  printf("%s", buf);
+  printf("%s\n", buf);
 
   // designates a name for the output file--for now, country+category
   char fileName[50];
@@ -40,7 +42,7 @@ void setQuery(const char* country, const char* category) {
   strcat(fileName, category);
 
   // calls fetchQuery using the constructed URL and filename
-  fetchQuery(buf, fileName);
+  return fetchQuery(buf, fileName);
 }
 
 // deletes a file with the name fileName
@@ -48,6 +50,8 @@ void cleanCache(const char* fileName) {
   remove(fileName);
 }
 
-int main(void){
-  setQuery("France", "cases");
-}
+/*int main(void){
+  long test;
+  test = setQuery("France", "cases");
+  printf("%ld\n", test);
+}*/
