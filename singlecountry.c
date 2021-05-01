@@ -47,7 +47,6 @@ void displayDeathData(char country[])
 	printf("Death data for %s\n", country);
 }
 
-
 int main()
 {
 	int option, i;
