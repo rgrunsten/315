@@ -1,2 +1,2 @@
 compile with 
-`gcc covidproj/singlecountry.c singlecountry -lcurl`
+`gcc singlecountry.c singlecountry -lcurl`
