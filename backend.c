@@ -88,7 +88,7 @@ void deleteFile(const char* fileName) {
 
 /*int main(void){
   long test;
-  test = setQuery("France", "cases");
-  char* buf = readFile("Francecases");
+  test = setHistoryQuery("France", "cases", "deaths");
+  char* buf = readFile("Francecasesdeaths");
   printf("%s\n", buf); 
 }*/
