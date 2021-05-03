@@ -45,13 +45,50 @@ long setQuery(const char* country, const char* category) {
   return fetchQuery(buf, fileName);
 }
 
-// deletes a file with the name fileName
-void cleanCache(const char* fileName) {
+long setHistoryQuery(const char* country, const char* category, const char* status) {
+
+  // uses memstream to construct the API url with country/category
+  FILE *stream;
+  char *buf;
+  size_t len;
+  stream = open_memstream(&buf, &len);
+  fprintf(stream, "%s%s?country=%s&status=%s", urlBase, category, country, status);
+  fclose(stream);
+  printf("%s\n", buf);
+
+  // designates a name for the output file--for now, country+category
+  char fileName[50];
+  strcpy(fileName, country);
+  strcat(fileName, category);
+  strcat(fileName, status);
+ 
+  //  calls fetchQuery using the constructed URL and filename
+  return fetchQuery(buf, fileName);
+}
+
+char * readFile(const char* fileName) {
+  FILE *stream = fopen(fileName, "rb");
+  char *buf = 0;
+  long len;
+  fseek(stream, 0, SEEK_END);
+  len = ftell(stream);
+  fseek(stream, 0, SEEK_SET);
+  buf = malloc(len);
+  if (buf) {
+    fread (buf, 1, len, stream);
+  }
+  fclose(stream);
+  return buf;
+}
+
+//  deletes a file with the name fileName
+void deleteFile(const char* fileName) {
   remove(fileName);
 }
 
 /*int main(void){
   long test;
   test = setQuery("France", "cases");
-  printf("%ld\n", test);
+  char* buf = readFile("Francecases");
+  printf("%s\n", buf); 
 }*/
