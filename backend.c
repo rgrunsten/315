@@ -86,6 +86,16 @@ void deleteFile(const char* fileName) {
   remove(fileName);
 }
 
+char * removeSpaces(char* inputString) {
+  const char* d = inputString;
+  do {
+    while (*d == ' ') {
+      ++d;
+    }
+  } while ((*inputString++ = *d++));
+  return inputString;
+}
+
 /*int main(void){
   long test;
   test = setHistoryQuery("France", "cases", "deaths");
