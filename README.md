@@ -1,2 +1,2 @@
 compile with 
-`gcc singlecountry.c singlecountry -lcurl`
+`gcc -ansi -D_XOPEN_SOURCE=700 -o covid_tracker menu.c -lcurl`
